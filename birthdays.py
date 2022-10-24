@@ -3,13 +3,7 @@ from collections import defaultdict
 
 
 def main():
-
-    global users, current_datetime, delta
-    
-    current_datetime = datetime.now()
-    
-    delta = timedelta(days=7)
-    
+  
     users= [
         {'name' : 'Bill', 'birthday' : datetime(year=2022, month=10, day=24)},
         {'name' : 'John', 'birthday' : datetime(year=2022, month=10, day=24)},
@@ -27,26 +21,29 @@ def main():
 
 def get_birthdays_per_week(users):
 
+    current_datetime = datetime.now()
+    
+    delta = timedelta(days=7)
+
     names = []
+
     day_of_week = []
+    
     result = defaultdict(list)
 
-    for nb in users:
-        name = nb.get('name')
-        birth = nb.get('birthday')
+    for user in users:
+        name = user.get('name')
+        birth = user.get('birthday')
         difference = birth - current_datetime
 
-        if difference <= delta and birth.strftime('%A') == 'Saturday':
-            birth = birth + timedelta(days=2)
-            names.append(name)
-            day_of_week.append(birth)
-
-        elif difference <= delta and birth.strftime('%A') == 'Sunday':
-            birth = birth + timedelta(days=1)
-            names.append(name)
-            day_of_week.append(birth)       
+        if difference <= delta:       
         
-        elif difference <= delta:
+            if difference <= delta and birth.strftime('%A') == 'Saturday': 
+                birth = birth + timedelta(days=2)
+
+            elif difference <= delta and birth.strftime('%A') == 'Sunday':
+                birth = birth + timedelta(days=1)
+
             names.append(name)
             day_of_week.append(birth)
 
@@ -54,8 +51,9 @@ def get_birthdays_per_week(users):
         result[d].append(n)
    
     for key, value in result.items():
+        printed_key = key.strftime("%A")
         lst_of_names = ', '.join(value)
-        print(f'{key.strftime("%A")}: {lst_of_names}')
+        print(f'{printed_key}: {lst_of_names}')
 
 
 if __name__ == '__main__':
